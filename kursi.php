@@ -25,8 +25,14 @@ $c = 1;
 $d = 1;
 $e = 1;
 
-$sql2 = "SELECT seats_booked FROM bookings WHERE id_movies = '$id_movies'";
+$sql2 = "SELECT seats_booked FROM bookings WHERE id_movies = '$id_movies' AND booking_date = '$tanggal' AND booking_time = '$waktu'";
 $query2 = mysqli_query($koneksi,$sql2);
+
+while($row = mysqli_fetch_array($query2)){
+    $seats_booked[] = $row['seats_booked'];
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -226,7 +232,9 @@ $query2 = mysqli_query($koneksi,$sql2);
         }
         
         input[type="checkbox"]:disabled + label {
-            background-color:rgb(245, 130, 130);
+            background-color: rgb(235, 103, 103);
+            
+            cursor: default;
         }
 
         .kosong {
@@ -506,8 +514,8 @@ $query2 = mysqli_query($koneksi,$sql2);
             <input type="submit" value="BUY NOW ">
         </form>
         <script>
-                <?php while($css = mysqli_fetch_assoc($query2)){ ?>
-                    document.getElementById("<?= $css['seats_booked'] ?>").disabled = true;
+                <?php foreach($seats_booked as $seat){ ?>
+                    document.getElementById("<?= $seat ?>").disabled = true;
                 <?php } ?>
         </script>
         <div class="kosong"></div><div class="tempat1"><h5>: Kosong</h5></div>

@@ -17,10 +17,12 @@ $tanggal_hari = $date->format('d');
 $bulan = $date->format('F');
 $tahun = $date->format('Y');
 
-$waktu = new DateTime($_POST['waktu']);
+$waktu = $_POST['waktu'];
+$time = new DateTime($waktu);
 
-$jam = $waktu->format('H');
-$menit = $waktu->format('i');
+$jam = $time->format('H');
+$menit = $time->format('i');
+
 
 $kursi = $_POST['kursi']; 
 $jumlah_kursi = count($kursi);
@@ -186,6 +188,14 @@ input[type="submit"] {
         <p class="total">Total Pembayaran: <strong>Rp. <?= $total ?></strong></p>
       </div>
       <form action="metode_payment.php" method="post">
+        <?php foreach($kursi as $input){ ?>
+          <input type="hidden" name="kursi[]" value="<?= $input ?>">
+        <?php } ?>
+        <input type="hidden" name="id_movies" value="<?= $id_movies ?>">
+        <input type="hidden" name="tanggal" value="<?= $tanggal ?>">
+        <input type="hidden" name="waktu" value="<?= $waktu ?>">
+        <input type="hidden" name="total" value="<?= $total ?>">
+
         <input type="submit" value="CONFIRM PAYMENT">
       </form>
     </div>

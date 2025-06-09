@@ -1,3 +1,40 @@
+<?php
+include "koneksi.php";
+
+
+$id_movies = $_POST['id_movies'];
+$sql = "SELECT * FROM movies WHERE id_movies = '$id_movies'";
+$query = mysqli_query($koneksi, $sql);
+$movies = mysqli_fetch_array($query);
+
+$waktu= $_POST['waktu'];
+$time = new DateTime($waktu);
+$jam = $time->format('H');
+$menit = $time->format('i');
+
+$tanggal = $_POST['tanggal'];
+$date = new DateTime($tanggal);
+
+$tanggal_hari = $date->format('d');
+$bulan = $date->format('M');
+$tahun = $date->format('Y');
+
+$total = $_POST['total'];
+
+$kursi = $_POST['kursi'];
+$A = "";
+$B = "";
+$C = "";
+$D = "";
+$E = "";
+foreach($kursi as $bangku){
+  if($bangku > 1 && $bangku <=12){
+    $A = "A";
+    
+  }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -160,8 +197,8 @@ button {
   <main class="ticket-wrapper">
     <div class="ticket-card" id="ticket">
       <h2>TICKET</h2>
-      <img class="poster" src="https://via.placeholder.com/300x100?text=Siksa+Neraka" alt="Siksa Neraka" />
-      <h3>SIKSA NERAKA - <span class="genre">horor</span></h3>
+      <img class="poster" src="movie\<?= $movies['poster_image']?>" alt="">
+      <h3><?= strtoupper($movies['title']) ?> - <span class="genre"><?= $movies['genre'] ?></span></h3>
       <p class="subtext">Show this ticket at the entrance</p>
 
       <div class="ticket-details">
@@ -169,10 +206,10 @@ button {
           <strong>CINEMA</strong><br>AZFA BIOSKOP MALL XXI
         </div>
         <div>
-          <strong>DATE</strong><br>03 Feb 2025
+          <strong>DATE</strong><br><?= $tanggal_hari ?> <?= $bulan ?> <?= $tahun ?>
         </div>
         <div>
-          <strong>TIMER</strong><br>19:45
+          <strong>TIMER</strong><br><?= $jam ?>:<?= $menit ?>
         </div>
         <div>
           <strong>SECTION</strong><br>C

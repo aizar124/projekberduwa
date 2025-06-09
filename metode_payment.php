@@ -1,3 +1,13 @@
+<?php
+include "koneksi.php";
+
+$kursi = $_POST['kursi'];
+$id_movies = $_POST['id_movies'];
+$waktu= $_POST['waktu'];
+$tanggal = $_POST['tanggal'];
+$total = $_POST['total'];
+
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -94,17 +104,26 @@
   height: 30px;
 }
 
-.bank button {
-  background: none;
-  color: red;
-  font-weight: bold;
+.bank input[type="radio"] {
+  display: none;
+}
+.bank label {
+  background-color: white;
   border: 2px solid red;
   border-radius: 20px;
   padding: 5px 15px;
+  font-weight: bold;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  color: red;
 }
 
-.buy-now {
+.bank input[type="radio"]:checked + label {
+  background-color: red;
+  color: white;
+}
+
+.buy-now input[type="submit"] {
   margin-top: 30px;
   background-color: red;
   color: white;
@@ -139,29 +158,45 @@
 
     <div class="payment-method">
       <div class="bank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Bank_Central_Asia_logo.svg" alt="BCA">
-        <button>link now</button>
+        <img src="bank/BCA.jpg" alt="">
+        <input type="radio" id="a"  name="button" value="bca" required>
+        <label for="a">Select</label>
       </div>
       <div class="bank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Logo_BRI.png" alt="BRI">
-        <button>link now</button>
+        <img src="bank/BRI.jpg" alt="">
+        <input type="radio" id="b"  name="button" value="bri">
+        <label for="b">Select</label>
       </div>
       <div class="bank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Logo_Bank_BNI.png" alt="BNI">
-        <button>link now</button>
+        <img src="bank/BNI.jpg" alt="">
+        <input type="radio" id="c"  name="button" value="bni">
+        <label for="c">Select</label>
       </div>
       <div class="bank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Logo_Bank_Mandiri.svg" alt="Mandiri">
-        <button>link now</button>
+        <img src="bank/MANDIRI.jpg" alt="">
+        <input type="radio" id="d"  name="button" value="mandiri">
+        <label for="d">Select</label>
       </div>
       <div class="bank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/Logo_DANA_Payment.svg" alt="Dana">
-        <button>link now</button>
+        <img src="bank/DANA.jpg" alt="">
+        <input type="radio" id="e"  name="button" value="dana">
+        <label for="e">Select</label>
       </div>
     </div>
 
     <hr class="divider">
-    <button class="buy-now">BUY NOW</button>
+    <form action="prs_metode_payment.php" method="post">
+      <?php foreach($kursi as $input){ ?>
+          <input type="hidden" name="kursi[]" value="<?= $input ?>">
+      <?php } ?>
+      <input type="hidden" name="id_movies" value="<?= $id_movies ?>">
+      <input type="hidden" name="tanggal" value="<?= $tanggal ?>">
+      <input type="hidden" name="waktu" value="<?= $waktu ?>">
+      <input type="hidden" name="total" value="<?= $total ?>">
+
+      <div class="buy-now"><input type="submit" value="BUY NOW"></div>
+    </form>
+    
   </main>
 </body>
 </html>
