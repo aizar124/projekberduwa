@@ -344,7 +344,7 @@ $query2 = mysqli_query($koneksi,$sql2);
         <form action="transaksi.php" method="post">
             <input type="hidden" name="id_movies" value="<?= $id_movies ?>">
             <input type="hidden" name="tanggal" value="<?= $tanggal ?>">
-            <input type="hidden" name="jam" value="<?= $waktu ?>">
+            <input type="hidden" name="waktu" value="<?= $waktu ?>">
 
             <div class="A1">
             <?php while($i <= 62){?>
