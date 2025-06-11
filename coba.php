@@ -1,211 +1,158 @@
-// HANYA COBA COBA!!!!!!!!!!
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Seat Booking</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #fafafa;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
+<header>
+        <div class="logo">
+            <img src="logo_web.png" alt="AZFATICKET Logo">
+            AZFATICKET.XXI
+        </div>
+        <nav>
+            <a href="home.php">MOVIE</a>
+            <a href="cinema.php">CINEMA</a>
+            <a href="contact_azfa.php">CONTACT</a>
+        </nav>
+        <div class="profile" onclick="toggleDropdown()">
+        <img src="userputih.jpg" alt="">
+        <div class="dropdown" id="dropdownMenu">
+            <?php if(isset($_SESSION['username'])){ ?>
+                <a href="profil_azfa.php"><button>Profil <?= $_SESSION['username'] ?></button></a>
+                <a href="logout.php"><button>Logout</button></a>
+            <?php }else{ ?>
+                <a href="login.php"><button>Sign In</button></a>
+                <a href="register.php"><button>Sign Up</button></a> 
+            <?php } ?>
+        </div>
+        
+    </header>
+    <script>
+    function toggleDropdown() {
+      document.getElementById("dropdownMenu").classList.toggle("active");
     }
 
-    .screen {
-      background-color: #f9a9a9;
-      border-radius: 20px;
-      padding: 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+    window.onclick = function(e) {
+      if (!e.target.closest('.profile')) {
+        document.getElementById("dropdownMenu").classList.remove("active");
+      }
     }
+  </script>
 
-    .row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
 
-    .row-label {
-      width: 20px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .seats {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .seat {
-      width: 30px;
-      height: 30px;
-      border: 2px solid white;
-      background-color: transparent;
+header {
+      background-color: #c62828;
       color: white;
-      text-align: center;
-      line-height: 30px;
-      border-radius: 5px;
+      padding: 25px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-radius: 0 0 50px 50px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      animation: navFadeIn 1s ease-in-out;
+    }
+
+    @keyframes navFadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      font-size: 28px;
+    }
+
+    .logo img {
+      margin-right: 10px;
+      height: 50px;
+      width: auto;
+    }
+
+    nav a {
+      margin: 0 18px;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      position: relative;
+      transition: all 0.4s ease;
+    }
+
+    nav a::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 2px;
+      background: white;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    nav a:hover {
+      transform: scale(1.1);
+    }
+
+    .profile img {
+      width: 50px;
+      height: 50px;
+      background-size: contain;
+      border-radius: 50%;
       cursor: pointer;
-      font-weight: bold;
+
+    }
+    .profile a{
+      text-decoration: none;
     }
 
-    .seat.selected {
-      background-color: #f24c4c;
+    .dropdown {
+      position: absolute;
+      top: 65px;
+      right: 0;
+      background: rgba(255,255,255,0.9);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      backdrop-filter: blur(8px);
+      padding: 10px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: 0.3s ease;
+      z-index: 100;
     }
 
-    .seat.booked {
-      background-color: white;
+    .dropdown.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
     }
 
-    .legend {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-left: 40px;
-      justify-content: center;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .dropdown button {
+      display: block;
+      background: linear-gradient(to right, #ff8a80, #ff5252);
       color: white;
-      font-size: 14px;
-    }
-
-    .legend-box {
-      width: 20px;
-      height: 20px;
-      border-radius: 4px;
-      border: 2px solid white;
-    }
-
-    .no-booking .legend-box {
-      background-color: transparent;
-    }
-
-    .select-booking .legend-box {
-      background-color: #f24c4c;
-    }
-
-    .have-booking .legend-box {
-      background-color: white;
-    }
-
-    .bottom {
-      margin-top: 30px;
-    }
-
-    .buy-button {
-      background-color: #e74c4c;
+      font-size: 18px;
+      font-weight: 500;
+      padding: 12px 20px;
+      margin: 10px 0;
+      width: 200px;
       border: none;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-      padding: 12px 40px;
       border-radius: 12px;
+      transition: all 0.3s ease;
       cursor: pointer;
     }
 
-    .seat-row {
-      display: flex;
+    .dropdown button:hover {
+      background: linear-gradient(to right, #ff1744, #e53935);
+      transform: scale(1.05);
     }
-  </style>
-</head>
-<body>
-  <div class="screen">
-    <!-- Seat Grid -->
-    <div class="seat-row">
-      <div>
-        <div class="row"><span class="row-label">A</span><div class="seats">
-          <div class="seat booked">1</div>
-          <div class="seat booked">2</div>
-          <div class="seat booked">3</div>
-          <div class="seat booked">4</div>
-          <div class="seat booked">6</div>
-          <div class="seat booked">7</div>
-        </div></div>
-
-        <div class="row"><span class="row-label">B</span><div class="seats">
-          <div class="seat booked">1</div>
-          <div class="seat booked">2</div>
-          <div class="seat booked">3</div>
-          <div class="seat booked">4</div>
-          <div class="seat booked">5</div>
-          <div class="seat booked">6</div>
-          <div class="seat booked">7</div>
-        </div></div>
-
-        <div class="row"><span class="row-label">C</span><div class="seats">
-          <div class="seat booked">1</div>
-          <div class="seat booked">2</div>
-          <div class="seat booked">3</div>
-          <div class="seat booked">4</div>
-          <div class="seat booked">5</div>
-          <div class="seat booked">6</div>
-          <div class="seat booked">7</div>
-        </div></div>
-
-        <div class="row"><span class="row-label">D</span><div class="seats">
-          <div class="seat booked">1</div>
-          <div class="seat booked">2</div>
-          <div class="seat booked">3</div>
-          <div class="seat booked">4</div>
-          <div class="seat booked">5</div>
-          <div class="seat booked">6</div>
-        </div></div>
-
-        <div class="row"><span class="row-label">E</span><div class="seats">
-          <div class="seat booked">1</div>
-          <div class="seat selected">2</div>
-          <div class="seat booked">3</div>
-          <div class="seat booked">4</div>
-          <div class="seat booked">5</div>
-          <div class="seat booked">6</div>
-        </div></div>
-
-        <div class="row"><span class="row-label">F</span><div class="seats">
-          <div class="seat booked">F1</div>
-          <div class="seat booked">F1</div>
-          <div class="seat booked">F2</div>
-          <div class="seat booked">F2</div>
-          <div class="seat booked">F3</div>
-          <div class="seat booked">F3</div>
-          <div class="seat booked">F4</div>
-          <div class="seat booked">F4</div>
-          <div class="seat booked">F5</div>
-          <div class="seat booked">F5</div>
-          <div class="seat booked">F6</div>
-          <div class="seat booked">F6</div>
-          <div class="seat booked">F7</div>
-          <div class="seat booked">F7</div>
-        </div></div>
-      </div>
-
-      <!-- Legend -->
-      <div class="legend">
-        <div class="legend-item no-booking">
-          <div class="legend-box"></div> NO BOOKING
-        </div>
-        <div class="legend-item select-booking">
-          <div class="legend-box"></div> SELECT BOOKING
-        </div>
-        <div class="legend-item have-booking">
-          <div class="legend-box"></div> HAVE BOOKING
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Buy Button -->
-  <div class="bottom">
-    <button class="buy-button">BUY NOW</button>
-  </div>
-</body>
-</html>

@@ -49,14 +49,14 @@ if($syaratUPLD !== 0){
     $query = mysqli_query($koneksi,$sql);
 
     if ($query){
-      header("location:hal.php?tambah_movies=sukses");
+      header("location:admin_azfa.php?tambah_movies=sukses");
         
     }
 }else{
   echo "Tidak bisa menambahkan gambar";
     echo "<br>";
     echo "$gabungan";
-    echo "<a href='hal.php'><button>kembali</button></a>";
+    echo "<a href='admin_azfa.php'><button>kembali</button></a>";
 }
 
 ?>

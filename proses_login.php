@@ -13,7 +13,7 @@ if ($role['role']== "customer"){
         exit;
     
 }else if($role['role']=="admin"){
-    header("location:hal.php?loginAdmin=sukses");
+    header("location:admin_azfa.php?loginAdmin=sukses");
     $_SESSION['admin'] = $username;
     exit;
     

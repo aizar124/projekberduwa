@@ -15,6 +15,12 @@ foreach ($kursi as $item) {
         $sql = "INSERT INTO bookings (seats_booked,total_price,booking_date,booking_time,id_movies) VALUES ('$item','$total','$tanggal','$waktu','$id_movies')";;
         $koneksi->query($sql);
         $query = true;
+        $sql2 = "SELECT * FROM bookings ORDER BY id_bookings DESC ";
+        $query2 = mysqli_query($koneksi,$sql2);
+        while($bookings = mysqli_fetch_assoc($query2)){
+            $id_bookings[] = $bookings['id_bookings'];
+            break;
+        }
         $bangku[] = $item;
     }
 
@@ -27,13 +33,16 @@ foreach ($kursi as $item) {
     <title>Document</title>
 </head>
 <body>
-    <form action="print_tiket.php" method="post">
+    <form id="formku" action="print_tiket.php" method="post">
         <input type="hidden" name="id_movies" value="<?= $id_movies ?>">
         <input type="hidden" name="tanggal" value="<?= $tanggal ?>">
         <input type="hidden" name="waktu" value="<?= $waktu ?>" >
         <input type="hidden" name="total" value="<?= $total ?>">
         <?php foreach($bangku as $chair){ ?>
             <input type="hidden" name="kursi[]" value="<?= $chair ?>">
+        <?php } ?>
+        <?php foreach($id_bookings as $id){?>
+            <input type="hidden" name="id_bookings[]" value="<?= $id ?>">
         <?php } ?>
     </form>
 
@@ -44,7 +53,5 @@ foreach ($kursi as $item) {
 </html>
 <?php
 
-if($query){
-    header("location:print_tiket.php?pembayaran=berhasil");
-}
+
 ?>

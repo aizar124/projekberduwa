@@ -3,21 +3,26 @@ include "koneksi.php";
 $sql9 = "SELECT * FROM movies";
 $query = mysqli_query($koneksi, $sql9);
 
- // ✅
+
+$sql2 = "SELECT id_iklan, judul_iklan, gambar FROM iklan"; 
+$query2 = mysqli_query($koneksi,$sql2);
 
 
 
-$sql = "SELECT * FROM movies ORDER BY id_movies DESC";
-$query = mysqli_query($koneksi,$sql);
-while($movies= mysqli_fetch_assoc($query)){ 
+$sql3 = "SELECT * FROM movies ORDER BY id_movies DESC";
+$query3 = mysqli_query($koneksi,$sql3);
+while($movies= mysqli_fetch_assoc($query3)){ 
     $id_movies = $movies['id_movies'];
      break; 
     } 
 
 
-$sql2 = "SELECT * FROM movies ";
-$query2 = mysqli_query($koneksi,$sql2);
-
+$sql4 = "SELECT * FROM movies ";
+$query4 = mysqli_query($koneksi,$sql4);
+while($movie= mysqli_fetch_assoc($query4)){ 
+    $id_movie = $movie['id_movies'];
+     break; 
+    } 
 
 if(isset($_POST['jumlah'])){
     $jumlah = $_POST['jumlah'];
@@ -27,7 +32,7 @@ if(isset($_POST['jumlah'])){
     
 }
 $sql6 = "SELECT gambar FROM iklan ORDER BY id_iklan DESC";
-$query = mysqli_query($koneksi,$sql6);
+$query5 = mysqli_query($koneksi,$sql6);
 ?>
 
 <!DOCTYPE html>
@@ -87,6 +92,58 @@ $query = mysqli_query($koneksi,$sql6);
     .main {
       display: flex;
       flex: 1;
+    }
+    .profile img {
+      width: 50px;
+      height: 50px;
+      background-size: contain;
+      border-radius: 50%;
+      cursor: pointer;
+
+    }
+    .profile a{
+      text-decoration: none;
+    }
+
+    .dropdown {
+      position: absolute;
+      top: 65px;
+      right: 0;
+      background: rgba(255,255,255,0.9);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      backdrop-filter: blur(8px);
+      padding: 10px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: 0.3s ease;
+      z-index: 100;
+    }
+    .dropdown.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown button {
+      display: block;
+      background: linear-gradient(to right, #ff8a80, #ff5252);
+      color: white;
+      font-size: 18px;
+      font-weight: 500;
+      padding: 12px 20px;
+      margin: 10px 0;
+      width: 200px;
+      border: none;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .dropdown button:hover {
+      background: linear-gradient(to right, #ff1744, #e53935);
+      transform: scale(1.05);
     }
 
     /* === SIDEBAR === */
@@ -298,7 +355,24 @@ $query = mysqli_query($koneksi,$sql6);
   <!-- Navbar -->
   <div class="navbar">
     <div class="logo">🎬 AZFATICKET.XXI</div>
+    <div class="profile" onclick="toggleDropdown()">
+        <img src="userputih.jpg" alt="">
+        <div class="dropdown" id="dropdownMenu">
+          <a href="logout.php"><button>Logout</button></a>
+          </div>
+      </div>
   </div>
+  <script>
+    function toggleDropdown() {
+      document.getElementById("dropdownMenu").classList.toggle("active");
+    }
+
+    window.onclick = function(e) {
+      if (!e.target.closest('.profile')) {
+        document.getElementById("dropdownMenu").classList.remove("active");
+      }
+    }
+  </script>
 
   <!-- Main Area -->
   <div class="main">
@@ -329,7 +403,7 @@ $query = mysqli_query($koneksi,$sql6);
             <th>Max Tayang</th>
             <th>Aksi</th>
         </tr>
-        <?php while($movies = mysqli_fetch_assoc($query2)){?>
+        <?php while($movies = mysqli_fetch_assoc($query)){?>
         <tr>
             <td><?= $movies['id_movies']; ?></td>
             <td><?= $movies['title']; ?></td>
@@ -341,7 +415,7 @@ $query = mysqli_query($koneksi,$sql6);
             <td><?= $movies['max_tayang']; ?></td>
             <td>
               <a href="edit_movies.php?id=<?= $movies['id_movies']; ?>">Edit</a>
-            <a href="hapus_movies.php?id=<?= $movies['id_movies']; ?>">hapus</a>
+              <a href="hapus_movies.php?id=<?= $movies['id_movies']; ?>">hapus</a>
             </td>
         </tr>
         <?php }?>
@@ -356,7 +430,7 @@ $query = mysqli_query($koneksi,$sql6);
             <th>gambar</th>
             <th>aksi</th>
         </tr>
-        <?php while($iklan = mysqli_fetch_assoc($query)){?>
+        <?php while($iklan = mysqli_fetch_assoc($query2)){?>
         <tr>
             
             <td><?= $iklan['id_iklan'] ?? ''; ?></td>
@@ -371,8 +445,8 @@ $query = mysqli_query($koneksi,$sql6);
 
     </table>
         </div>
-      <div id="movie" class="section ">
-        <form action="prs_tambah_movies.php" method="post" enctype="multipart/form-data">
+      <div id="movie" class="section">
+        <form action="prs_tambah_movie.php" method="post" enctype="multipart/form-data">
         <label for="">Judul :</label><br>
         <input type="text" name="title" id=""><br><br>
 

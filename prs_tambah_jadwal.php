@@ -12,9 +12,9 @@ for ($i = 0; $i < count($tanggal); $i++) {
 
 
 if($query){
-    header("location:hal.php?tambah_jadwal=sukses");
+    header("location:admin_azfa.php?tambah_jadwal=sukses");
 }else{
-    header("location:hal.php?tambah_jadwal=gagal");
+    header("location:admin_azfa.php?tambah_jadwal=gagal");
 }
 
 ?>

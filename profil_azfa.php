@@ -1,3 +1,14 @@
+<?php 
+include "koneksi.php";
+session_start();
+
+$username = $_SESSION['username'];
+$sql = "SELECT * FROM users WHERE username = '$username'";
+$query = mysqli_query($koneksi, $sql);
+
+$users = mysqli_fetch_assoc($query);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,40 +28,85 @@
     }
 
     /* NAVBAR */
-    .navbar {
-      background: linear-gradient(to right, #f44336, #f48fb1);
-      padding: 15px 40px;
+    header {
+      background-color: #c62828;
+      color: white;
+      padding: 25px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: relative;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-radius: 0 0 50px 50px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      animation: navFadeIn 1s ease-in-out;
     }
 
-    .navbar .logo {
-      font-weight: bold;
-      font-size: 24px;
-      color: white;
+    @keyframes navFadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
-    .navbar .nav-links {
+    .logo {
       display: flex;
-      gap: 30px;
-      color: white;
-      font-size: 18px;
-      cursor: pointer;
+      align-items: center;
+      font-weight: bold;
+      font-size: 28px;
     }
 
-    .profile {
+    .logo img {
+      margin-right: 10px;
+      height: 50px;
+      width: auto;
+    }
+
+    nav a {
+      margin: 0 18px;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
       position: relative;
-      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+
+    nav a::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 2px;
+      background: white;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    nav a:hover {
+      transform: scale(1.1);
     }
 
     .profile img {
-      width: 45px;
-      height: 45px;
+      width: 50px;
+      height: 50px;
+      background-size: contain;
       border-radius: 50%;
-      border: 2px solid white;
+      cursor: pointer;
+
+    }
+    .profile a{
+      text-decoration: none;
     }
 
     .dropdown {
@@ -180,48 +236,30 @@
 <body>
 
   <!-- NAVBAR -->
-  <div class="navbar">
-    <div class="logo">AZFATICKET.XXI</div>
-    <div class="nav-links">
-      <div>MOVIE</div>
-      <div>CINEMA</div>
-      <div>CONTACT</div>
-    </div>
-    <div class="profile" onclick="toggleDropdown()">
-      <img src="https://i.ibb.co/fMkv8NH/sample-user.jpg" alt="profile">
-      <div class="dropdown" id="dropdownMenu">
-        <button>My Profile</button>
-        <button>Logout</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- PROFIL FORM -->
-  <div class="card">
-    <img src="https://i.ibb.co/fMkv8NH/sample-user.jpg" class="profile-pic" alt="profile">
-    <h2>Update Your Profile</h2>
-    <form>
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" placeholder="Enter your name">
-      </div>
-      <div class="form-group">
-        <label>Phone Number</label>
-        <input type="text" placeholder="Enter your phone number">
-      </div>
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" placeholder="Enter your Gmail">
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea placeholder="Tell us something about yourself..."></textarea>
-      </div>
-      <button type="submit" class="submit-btn">Save</button>
-    </form>
-  </div>
-
-  <script>
+  <header>
+        <div class="logo">
+            <img src="logo_web.png" alt="AZFATICKET Logo">
+            AZFATICKET.XXI
+        </div>
+        <nav>
+            <a href="home.php">MOVIE</a>
+            <a href="cinema.php">CINEMA</a>
+            <a href="contact_azfa.php">CONTACT</a>
+        </nav>
+        <div class="profile" onclick="toggleDropdown()">
+        <img src="userputih.jpg" alt="">
+        <div class="dropdown" id="dropdownMenu">
+            <?php if(isset($_SESSION['username'])){ ?>
+                <a href="profil_azfa.php"><button>Profil <?= $_SESSION['username'] ?></button></a>
+                <a href="logout.php"><button>Logout</button></a>
+            <?php }else{ ?>
+                <a href="login.php"><button>Sign In</button></a>
+                <a href="register.php"><button>Sign Up</button></a> 
+            <?php } ?>
+        </div>
+        
+    </header>
+    <script>
     function toggleDropdown() {
       document.getElementById("dropdownMenu").classList.toggle("active");
     }
@@ -232,6 +270,34 @@
       }
     }
   </script>
+
+  <!-- PROFIL FORM -->
+  <div class="card">
+    <img src="userputih.jpg" class="profile-pic" alt="">
+    <h2>Update Your Profile</h2>
+    <form action="prs_profil_azfa.php" method="post">
+      <div class="form-group">
+        <input type="hidden" name="id_users" value="<?= $users['id_users'] ?>">
+        <label>Name</label>
+        <input type="text" name="name" value="<?= $users['nama'] ?>" placeholder="Enter your name">
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="text" name="no_hp" value="<?= $users['no_hp'] ?>" placeholder="Enter your phone number">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" name="email" value="<?= $users['gmail'] ?>" placeholder="Enter your Gmail">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea name="description" value="<?= $users['description'] ?>" placeholder="Tell us something about yourself..."><?= $users['description'] ?></textarea>
+        
+      </div>
+      <button type="submit" class="submit-btn">Save</button>
+    </form>
+  </div>
+
 
 </body>
 </html>
